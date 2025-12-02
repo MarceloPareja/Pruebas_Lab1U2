@@ -2,16 +2,24 @@
   "name": "lab_pruebasunitarias",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarceloPareja/Pruebas_Lab1U2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MarceloPareja/Pruebas_Lab1U2/issues"
+  },
+  "homepage": "https://github.com/MarceloPareja/Pruebas_Lab1U2#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "eslint": "^9.39.1",
