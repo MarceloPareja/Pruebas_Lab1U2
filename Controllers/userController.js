@@ -1,6 +1,5 @@
-import { User } from "../Models/User";
-
-export class Controller{
+const User = require("../Models/User").User;
+class Controller{
     constructor()
     {
         this.database=[];
@@ -34,3 +33,5 @@ export class Controller{
         return emailRegexp.test(email);
     }
 }
+
+module.exports={Controller};

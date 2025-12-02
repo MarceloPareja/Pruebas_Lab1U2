@@ -1,4 +1,4 @@
-import { Controller } from "../Controllers/userController";
+const Controller = require("../Controllers/userController").Controller;
 const express=require("express");
 const router=express.Router();
 

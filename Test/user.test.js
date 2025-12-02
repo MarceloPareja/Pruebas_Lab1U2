@@ -1,62 +1,90 @@
-// test/user.test.js
 const request = require('supertest');
-const app = require('../app');
+const app = require('../app'); 
+const { Controller } = require('../Controllers/userController');
 
-describe('API de Usuarios', () => {
-  beforeEach(() => {
-    if (app.users) app.users = [];
-  });
+const controller = new Controller();
 
-  it('GET /users debería devolver lista vacía al inicio', async () => {
-    const res = await request(app).get('/users');
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual([]);
-  });
+beforeEach(() => {
+    controller.database = [];  
+});
 
-  it('POST /users debería crear un usuario válido', async () => {
-    const nuevoUsuario = {
-      nombre: "Juan Pérez",          
-      email: "juan.perez@espe.edu.ec"
-    };
+describe('Pruebas API Usuarios - Jest + Supertest', () => {
 
-    const res = await request(app)
-      .post('/users')
-      .send(nuevoUsuario);
+    it('GET / debe devolver 404 y mensaje cuando no hay usuarios', async () => {
+        const res = await request(app).get('/');
 
-    expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty('id');
-    expect(res.body.nombre).toBe(nuevoUsuario.nombre);
-    expect(res.body.email).toBe(nuevoUsuario.email);
-  });
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe('No hay usuarios registrados');
+    });
 
-  it('POST /users debería rechazar datos inválidos (sin nombre)', async () => {
-    const res = await request(app)
-      .post('/users')
-      .send({ email: "solo@email.com" });
+    it('POST /new debe crear un usuario válido (usa TU NOMBRE REAL aquí)', async () => {
+        const res = await request(app)
+            .post('/new')
+            .send({
+                name: "Juan Pérez",           
+                email: "jperez23@espe.edu.ec"   
+            });
 
-    expect(res.status).toBe(400);
-    expect(res.body.error).toBeDefined();
-  });
+        expect(res.status).toBe(201);
+        expect(res.body).toBe('Usuario Creado');
+    });
 
-  it('POST /users debería rechazar email inválido', async () => {
-    const res = await request(app)
-      .post('/users')
-      .send({ 
-        nombre: "Ana",
-        email: "esto-no-es-un-email"
-      });
+    it('GET / debe devolver 200 y lista de usuarios después de crear uno', async () => {
+        await request(app).post('/new').send({
+            name: "Ana López",
+            email: "ana@espe.edu.ec"
+        });
 
-    expect(res.status).toBe(400);
-  });
+        const res = await request(app).get('/');
+        expect(res.status).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body.length).toBe(1);
+        expect(res.body[0].name).toBe('Ana López'); 
+    });
 
-  it('GET /users debería devolver los usuarios creados', async () => {
-    await request(app)
-      .post('/users')
-      .send({ nombre: "Maria Gomez", email: "maria@espe.edu.ec" });
+    it('POST /new debe rechazar nombre inválido (menos de 3 letras o con números)', async () => {
+        const res = await request(app)
+            .post('/new')
+            .send({
+                name: "Ab1",
+                email: "test@dominio.com"
+            });
 
-    const res = await request(app).get('/users');
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0].nombre).toBe("María Gómez");
-  });
+        expect(res.status).toBe(500);
+        expect(res.body.message).toContain('Nombre o correo invalidos');
+    });
+
+    it('POST /new debe rechazar email sin @ ni dominio', async () => {
+        const res = await request(app)
+            .post('/new')
+            .send({
+                name: "Carlos Pérez",
+                email: "carlosgmail.com"
+            });
+
+        expect(res.status).toBe(500);
+        expect(res.body.message).toContain('Nombre o correo invalidos');
+    });
+
+    it('Flujo completo: crear varios usuarios → GET debe mostrarlos todos', async () => {
+        await request(app).post('/new').send({ name: "María González", email: "maria@espe.edu.ec" });
+        await request(app).post('/new').send({ name: "Luis Ramírez",   email: "luis@espe.edu.ec" });
+
+        const res = await request(app).get('/');
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(2);
+        expect(res.body[0].name).toBe("María González");
+        expect(res.body[1].name).toBe("Luis Ramírez");
+    });
+
+    it('Debe aceptar nombres con espacios y ñ (cobertura extra)', async () => {
+        const res = await request(app)
+            .post('/new')
+            .send({
+                name: "José María Ñáñez",
+                email: "jose@espe.edu.ec"
+            });
+
+        expect(res.status).toBe(201);
+    });
 });
