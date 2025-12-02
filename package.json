@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
-  },
+"scripts": {
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:coverage": "jest --coverage",
+  "lint": "eslint .",
+  "lint:fix": "eslint . --fix"
+}
+,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MarceloPareja/Pruebas_Lab1U2.git"
