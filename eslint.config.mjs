@@ -4,7 +4,15 @@ export default [
   js.configs.recommended,
 
   {
-    files: ["**/*.js"],
+    files: [
+      "**/*.js",               
+      "Configuracion/**/*.js",
+      "Controllers/**/*.js",
+      "Models/**/*.js",
+      "Routes/**/*.js",
+      "Src/**/*.js",
+      "Test/**/*.js"
+    ],
 
     languageOptions: {
       ecmaVersion: "latest",
