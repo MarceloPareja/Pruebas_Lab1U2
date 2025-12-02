@@ -6,32 +6,32 @@ class Controller{
     }
 
     getAllUsers() {
-        return JSON.stringify(this.database);
+        return this.database;
     }
 
-    addNewUser(name, email){
-        if(this.validateName(name) && this.validateMail(email))
-        {
-            let newId=this.database.length+1;
-            this.database.push(new User(newId, name, email));
-            return {message: "Usuario Creado", status: "201"};
-        }
-        else
-        {
-            throw new Error("Error. Nombre o correo invalidos, no se pudo guardar.");
-        }
+    addNewUser(name, email) {
+    if (this.validateName(name) && this.validateMail(email)) {
+        let newId = this.database.length + 1;
+        this.database.push(new User(newId, name.trim(), email));
+        return { message: "Usuario Creado" };  
+    } else {
+        throw new Error("Nombre o correo invalidos");
     }
+}
 
-    validateName(name){
-        const nameRegexp=/^([A-Za-zñÑ]){3,20}$/;
-        return nameRegexp.test(name);
-    }
+    validateName(name) {
+    if (!name || typeof name !== 'string') return false;
+    const cleaned = name.trim();
+    if (cleaned.length < 3 || cleaned.length > 40) return false;
 
-    validateMail(email)
-    {
-        const emailRegexp=/^[a-zA-Z0–9._%+-]{3,}@[a-zA-Z0–9.-]{2,}\.[a-zA-Z]{2,}$/;
-        return emailRegexp.test(email);
-    }
+    const nameRegexp = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    return nameRegexp.test(cleaned);
+}
+
+validateMail(email) {
+    const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegexp.test(email);
+}
 }
 
 module.exports={Controller};
