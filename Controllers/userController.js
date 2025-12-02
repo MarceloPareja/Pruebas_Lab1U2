@@ -15,6 +15,7 @@ export class Controller{
         {
             let newId=this.database.length+1;
             this.database.push(new User(newId, name, email));
+            return {message: "Usuario Creado", status: "201"};
         }
         else
         {
@@ -32,8 +33,10 @@ export class Controller{
 
     validateMail(email)
     {
-        const emailRegexp=/^[a-zA-Z0–9._%+-]+@[a-zA-Z0–9.-]+\.[a-zA-Z]{2,}$/;
-
+        const emailRegexp=/^[a-zA-Z0–9._%+-]{3,}@[a-zA-Z0–9.-]{2,}\.[a-zA-Z]{2,}$/;
+        /*Esta expresión regular valida que:
+        - Se ingresen al menos 3 caracteres entre numeros y letras antes del @
+        - tras el @ se ingrsen al menos 2 caracteres seguidos por un punto y por otros 2 caracteres como minimo*/
         return emailRegexp.test(email);
     }
 }
