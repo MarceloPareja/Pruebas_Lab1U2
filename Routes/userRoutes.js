@@ -6,12 +6,14 @@ const router=express.Router();
 const controller=new Controller();
 
 
-router.get("/users", (req, res)=>{
+router.get("/", (req, res)=>{
     
     try
     {
         const users = controller.getAllUsers();
-        res.status(200).json(users);
+        (users.length>0)?
+        res.status(200).json(users) :
+        res.status(404).json({message: "No hay usuarios registrados"});
     }
     catch(error)
     {
@@ -19,7 +21,7 @@ router.get("/users", (req, res)=>{
     }
 });
 
-router.post("/users/new", (req, res)=>{
+router.post("/new", (req, res)=>{
     
     try
     {

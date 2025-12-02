@@ -25,18 +25,12 @@ export class Controller{
 
     validateName(name){
         const nameRegexp=/^([A-Za-zñÑ]){3,20}$/;
-        /*Esta expresión regular valida que:
-        - Solo se ingresen letras mayusculas y minusculas, incluida la ñ
-        - Se ingrese como minimo 3 letras y como maximo 20*/
         return nameRegexp.test(name);
     }
 
     validateMail(email)
     {
         const emailRegexp=/^[a-zA-Z0–9._%+-]{3,}@[a-zA-Z0–9.-]{2,}\.[a-zA-Z]{2,}$/;
-        /*Esta expresión regular valida que:
-        - Se ingresen al menos 3 caracteres entre numeros y letras antes del @
-        - tras el @ se ingrsen al menos 2 caracteres seguidos por un punto y por otros 2 caracteres como minimo*/
         return emailRegexp.test(email);
     }
 }

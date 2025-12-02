@@ -1,0 +1,11 @@
+const express = require('express');
+const userRoutes = require('./Routes/userRoutes');
+const app = express();
+
+app.use("/users", userRoutes);
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+
+module.exports = app;
