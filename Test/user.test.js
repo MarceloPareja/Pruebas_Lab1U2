@@ -85,4 +85,15 @@ describe('Pruebas API Usuarios - Jest + Supertest', () => {
 
         expect(res.status).toBe(201);
     });
+
+    it('Debe rechazar un nombre demasiado largo (mas de 40 letras)', async () => {
+        const res = await request(app)
+            .post('/users/new')
+            .send({
+                name: "Washington Alejandro De la Vega Montenegro",
+                email: "davega@espe.edu.ec"
+            });
+
+        expect(res.status).toBe(400);
+    });
 });
